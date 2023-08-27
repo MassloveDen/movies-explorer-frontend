@@ -26,6 +26,7 @@
             
 ## Ссылки на проект
 
+Макет dark-2
 IP 51.250.29.6  
 Frontend https://mass-diplom.nomoreparties.co 
 Backend https://api.mass-diplom.nomoreparties.co 
