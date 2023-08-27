@@ -78,12 +78,6 @@
   border-bottom: 2px solid #fff;
 }
 
-/* .drawer__text-account {
-  margin: 0;
-  padding: 9.5px 0 9.5px 11px;
-  
-} */
-
 .drawer__account {
   border: none;
   display: flex;
@@ -103,7 +97,6 @@
   line-height: 12px;
   color: #fff;
   text-decoration: none;
-  
   width: 100px;
   background-color: #313131;
   height: 32px;
@@ -136,9 +129,4 @@
     margin-bottom: 47px;
   }
 
-  .drawer__link-account {
-    border-radius: 40px;
-    background: #202020;
-    box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.08);
-  }
 }
