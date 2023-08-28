@@ -1,0 +1,132 @@
+.overlay {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  transition: visibility 0.25s linear, opacity 0.25s linear;
+}
+
+.visible {
+  visibility: visible;
+  display: flex;
+}
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 520px;
+  height: 100%;
+  background: #202020;
+}
+
+.drawer__active {
+  visibility: visible;
+}
+
+.drawer__remove {
+  background: url('../../images/close.svg') no-repeat center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: 27px;
+  transition: opacity 0.8s linear;
+  padding: 0;
+}
+
+.drawer__remove:hover {
+  opacity: 0.8;
+}
+
+.drawer__list {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  padding-top: 157px;
+  min-width: 340px;
+  margin: 0;
+}
+
+.drawer__link {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.7s;
+  padding-bottom: 4px;
+}
+
+.drawer__link:hover {
+  opacity: 0.7;
+}
+
+.drawer__link_active {
+  border-bottom: 2px solid #fff;
+}
+
+.drawer__account {
+  border: none;
+  display: flex;
+  margin-bottom: 90px;
+  margin-top: auto;
+  padding: 0;
+}
+
+.drawer__link-account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: opacity 0.7s;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 12px;
+  color: #fff;
+  text-decoration: none;
+  width: 100px;
+  background-color: #313131;
+  height: 32px;
+  border-radius: 20px;
+}
+
+.drawer__link-account:hover {
+  opacity: 0.7;
+}
+
+
+@media screen and (max-width: 520px) {
+  .drawer__remove {
+    right: 19px;
+    top: 18px;
+  }
+
+  .drawer__list {
+    padding-top: 145px;
+    min-width: 300px;
+    gap: 24px;
+  }
+
+  .drawer__link {
+    line-height: 22px;
+    padding-bottom: 7px;
+  }
+
+  .drawer__account {
+    margin-bottom: 47px;
+  }
+
+}
