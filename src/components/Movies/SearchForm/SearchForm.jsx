@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './SearchForm.css';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
+import useForm from '../../../hooks/useForm';
+import { getFromLocalStorage } from '../../../utils/helpers';
 
-function SearchForm() {
-  const [buttonDisabled, setButtonDisabled] = React.useState(false);
+function SearchForm({ addMovies, movieFilter, setMovieFilter }) {
+  const { values, handleChange, setValues, setValid } = useForm();
+  const [isSpan, setIsSpan] = React.useState(false);
 
-  console.log(setButtonDisabled);
+  useEffect(() => {
+    setValues({ name: getFromLocalStorage('querySearch') });
+    if (values.name) {
+      setValid(true);
+    }
+  }, []);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (values.name) {
+      addMovies(values.name);
+    } else {
+      setIsSpan(true);
+    }
+  }
 
   return (
     <section className='search'>
@@ -15,15 +32,25 @@ function SearchForm() {
           type='search'
           placeholder='Фильм'
           required
+          name='name'
+          value={values.name || ''}
+          onChange={handleChange}
+          minLength='1'
         />
         <button
-          disabled={buttonDisabled ? true : false}
           type='submit'
           className='search__button-form'
+          onClick={handleSubmit}
         ></button>
       </form>
+      {isSpan && (
+        <span className='search__span'>Нужно ввести ключевое слово</span>
+      )}
       <div className='search__checkbox'>
-        <FilterCheckbox />
+        <FilterCheckbox
+          movieFilter={movieFilter}
+          setMovieFilter={setMovieFilter}
+        />
         <span className='search__span-checkbox'>Короткометражки</span>
       </div>
     </section>

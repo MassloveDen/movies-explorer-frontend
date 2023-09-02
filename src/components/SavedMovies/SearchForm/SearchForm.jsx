@@ -39,9 +39,7 @@ function SearchForm({ addMovies, movieFilter, setMovieFilter }) {
           type='submit'
           className='search__button-form'
           onClick={handleSubmit}
-        >
-          Найти
-        </button>
+        ></button>
       </form>
       {isSpan && (
         <span className='search__span'>Нужно ввести ключевое слово</span>

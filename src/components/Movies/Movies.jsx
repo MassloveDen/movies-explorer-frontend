@@ -5,12 +5,14 @@ import SearchForm from './SearchForm/SearchForm';
 import MoviesCardList from './MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import { moviesApi } from '../../utils/MoviesApi';
+import { setToLocalStorage } from '../../utils/helpers';
 import {
-  getFromLocalStorage,
-  qtyAddCards,
-  qtyCards,
-  setToLocalStorage,
-} from '../../utils/helpers';
+  MOVIE_ADD_THREE,
+  MOVIE_ADD_TWO,
+  MOVIE_SCREEN_LARGE,
+  MOVIE_SCREEN_MEDIUM,
+  MOVIE_SCREEN_MOBILE,
+} from '../../utils/constants';
 
 function Movies({
   loggedIn,
@@ -22,46 +24,48 @@ function Movies({
   movieFilter,
   setMovieFilter,
   isCardsLoading,
-  setIsCardsLoading,
-  setIsLoading,
-  isLoading,
+  setIsCardsLoading
 }) {
   const [addMoviesButton, setAddMovieButton] = React.useState(0);
+  const [isActiveButton, setIsActiveButton] = React.useState(
+    cardList.length <= addMoviesButton
+  );
   const [isFind, setIsFind] = React.useState(false);
-  const [filteredMovies, setFilteredMovies] = React.useState([]);
 
   function handleAddButton() {
-    setAddMovieButton(addMoviesButton + qtyAddCards());
-  }
-
-  async function addMovies(query) {
-    setAddMovieButton(qtyCards());
-    setIsCardsLoading(true);
-    let mineMovies = getFromLocalStorage('mineMovies');
-    if (!mineMovies || mineMovies.length === 0) {
-      const jwt = getFromLocalStorage('jwt');
-      try {
-        setIsLoading(true);
-        mineMovies = await moviesApi.getInfo(jwt);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
+    const innerWidth = window.innerWidth;
+    if (innerWidth <= MOVIE_SCREEN_MOBILE) {
+      setAddMovieButton(addMoviesButton + MOVIE_ADD_TWO);
+    } else if (innerWidth <= MOVIE_SCREEN_MEDIUM) {
+      setAddMovieButton(addMoviesButton + MOVIE_ADD_TWO);
+    } else if (innerWidth <= MOVIE_SCREEN_LARGE) {
+      setAddMovieButton(addMoviesButton + MOVIE_ADD_THREE);
+    } else {
+      setAddMovieButton(addMoviesButton + MOVIE_ADD_THREE);
     }
-    const resultMoviesFilter = moviesFilter(query, mineMovies);
-    setFilteredMovies(resultMoviesFilter);
-    setCardList(mineMovies);
-    setToLocalStorage('querySearch', query);
-    setToLocalStorage('mineMovies', mineMovies);
-    resultMoviesFilter.length === 0 ? setIsFind(true) : setIsFind(false);
-    setIsCardsLoading(false);
+    setIsActiveButton(cardList.length === addMoviesButton);
   }
 
   React.useEffect(() => {
-    const query = getFromLocalStorage('querySearch');
-    if (query) addMovies(query);
+    handleAddButton(); 
+    window.addEventListener('resize', handleAddButton);
+    return () => {
+      window.removeEventListener('resize', handleAddButton);
+    };
   }, []);
+
+  function addMovies(query) {
+    setIsCardsLoading(true);
+    moviesApi.getInfo().then((movieResult) => {
+      const resultMoviesFilter = moviesFilter(query, movieResult);
+      setCardList(resultMoviesFilter);
+      setToLocalStorage('mineMovies', resultMoviesFilter);
+      setToLocalStorage('querySearch', query);
+      resultMoviesFilter.length === 0 ? setIsFind(true) : setIsFind(false);
+      setIsActiveButton(resultMoviesFilter.length <= addMoviesButton);
+      setIsCardsLoading(false);
+    });
+  }
 
   function moviesFilter(query, cardList) {
     const filteredList = cardList.filter((movie) => {
@@ -80,10 +84,9 @@ function Movies({
           movieFilter={movieFilter}
           setMovieFilter={setMovieFilter}
           setIsFind={setIsFind}
-          isLoading={isLoading}
         />
         <MoviesCardList
-          movies={filteredMovies}
+          movies={cardList}
           addMoviesButton={addMoviesButton}
           setAddMovieButton={setAddMovieButton}
           onCardSave={onCardSave}
@@ -91,10 +94,16 @@ function Movies({
           handleDeleteCard={handleDeleteCard}
           movieFilter={movieFilter}
           isCardsLoading={isCardsLoading}
-          onClickAddButton={handleAddButton}
+          isActiveButton={isActiveButton}
+          handleAddButton={handleAddButton}
         />
         {isFind && (
           <span className='movies__no-movies'>«Ничего не найдено»</span>
+        )}
+        {!isActiveButton && (
+          <button className='movies__button' onClick={handleAddButton}>
+            Ещё
+          </button>
         )}
       </main>
       <Footer />
