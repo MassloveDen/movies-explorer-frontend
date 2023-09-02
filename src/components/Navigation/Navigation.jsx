@@ -1,7 +1,6 @@
 import React from 'react';
 import './Navigation.css';
 import { NavLink } from 'react-router-dom';
-// import account from '../../images/account.svg';
 import Drawer from '../Drawer/Drawer';
 
 function Navigation() {
@@ -12,13 +11,15 @@ function Navigation() {
   return (
     <nav className='navigation'>
       <ul className='navigation__container'>
-        <li className='navigation__content'>
+      <li className='navigation__content'>
           <NavLink
             className={({ isActive }) => (isActive ? linkActive : link)}
             to='/movies'
           >
             Фильмы
           </NavLink>
+        </li>
+        <li className='navigation__content'>
           <NavLink
             className={({ isActive }) => (isActive ? linkActive : link)}
             to='/saved-movies'
@@ -31,14 +32,6 @@ function Navigation() {
         <NavLink className='navigation__link' to='/profile'>
           Аккаунт
         </NavLink>
-          {/* <div className='navigation__link-account navigation__active-link'>
-            <img
-              src={account}
-              className='navigation__icon-account'
-              alt='Иконка профиля'
-            />
-          </div> */}
-        
       </div>
       <div className='navigation__burger'>
         <div
@@ -51,7 +44,7 @@ function Navigation() {
           <div className='navigation__line-burger' />
         </div>
         {opened && (
-          <Drawer onClickClose={() => setOpened(false)} />
+          <Drawer opened={opened} onClickClose={() => setOpened(!true)} />
         )}
       </div>
     </nav>
