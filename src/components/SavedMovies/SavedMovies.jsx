@@ -10,63 +10,71 @@ import { getFromLocalStorage, setToLocalStorage } from '../../utils/helpers';
 import { mainApi } from '../../utils/MainApi';
 
 function SavedMovies({
-  loggedIn,
-  onCardDelete,
-  savedMovies,
-  setSavedMovies,
-  movieFilter,
-  setMovieFilter,
-  setIsCardsLoading,
-  setCardList
+	loggedIn,
+	onCardDelete,
+	savedMovies,
+	setSavedMovies,
+	movieFilter,
+	setMovieFilter,
+	setIsCardsLoading,
+	setCardList,
 }) {
+	React.useEffect(() => {
+		const jwt = getFromLocalStorage('jwt');
+		mainApi
+			.getSavedCard(jwt)
+			.then((data) => {
+				setSavedMovies(data);
+				setToLocalStorage('mineSavedMovies', data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, []);
 
-  React.useEffect(() => {
-    const jwt = getFromLocalStorage('jwt');
-    mainApi
-      .getSavedCard(jwt)
-      .then((data) => {
-        setSavedMovies(data);
-        setToLocalStorage('mineSavedMovies', data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+	function addMovies(query) {
+		setSavedMovies((prev) =>
+			prev.filter((movie) => 
+      movie.nameRU.toLowerCase().includes(query.toLowerCase()) ||
+      movie.nameEN.toLowerCase().includes(query.toLowerCase()))
+      
+		);
+		setIsCardsLoading(true);
+		moviesApi.getInfo().then((movieResult) => {
+			const resultMoviesFilter = moviesFilter(query, movieResult);
+			setCardList(resultMoviesFilter);
+			setToLocalStorage('mineMovies', resultMoviesFilter);
+			setToLocalStorage('querySearch', query);
+			setIsCardsLoading(false);
+		});
+	}
 
+	function moviesFilter(query, cardList) {
+		const filteredList = cardList.filter((movie) => {
+			return movie.nameRU.toLowerCase().includes(query.toLowerCase());
+		});
+		return filteredList;
+	}
 
-  function addMovies(query) {
-    setIsCardsLoading(true);
-    moviesApi.getInfo().then((movieResult) => {
-      const resultMoviesFilter = moviesFilter(query, movieResult);
-      setCardList(resultMoviesFilter);
-      setToLocalStorage('mineMovies', resultMoviesFilter);
-      setToLocalStorage('querySearch', query);
-      setIsCardsLoading(false);
-    });
-  }
-
-  function moviesFilter(query, cardList) {
-    const filteredList = cardList.filter((movie) => {
-      return movie.nameRU.toLowerCase().includes(query.toLowerCase());
-    });
-    return filteredList;
-  }
-
-  return (
-    <>
-      <Header loggedIn={loggedIn} />
-      <main className='movies'>
-        <SearchForm addMovies={addMovies} movieFilter={movieFilter} setMovieFilter={setMovieFilter} />
-        <MoviesCardList
-          movies={savedMovies}
-          onCardDelete={onCardDelete}
-          movieFilter={movieFilter}
-        />
-        <SavedDevider />
-      </main>
-      <Footer />
-    </>
-  );
+	return (
+		<>
+			<Header loggedIn={loggedIn} />
+			<main className='movies'>
+				<SearchForm
+					addMovies={addMovies}
+					movieFilter={movieFilter}
+					setMovieFilter={setMovieFilter}
+				/>
+				<MoviesCardList
+					movies={savedMovies}
+					onCardDelete={onCardDelete}
+					movieFilter={movieFilter}
+				/>
+				<SavedDevider />
+			</main>
+			<Footer />
+		</>
+	);
 }
 
 export default SavedMovies;
