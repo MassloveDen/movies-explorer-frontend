@@ -26,12 +26,11 @@ function SearchForm({ addMovies, movieFilter, setMovieFilter }) {
 
   return (
     <section className='search'>
-      <form className='search__form' name='searching'>
+      <form className='search__form' name='searching' onSubmit={handleSubmit}>
         <input
           className='search__input-form'
           type='search'
           placeholder='Фильм'
-          required
           name='name'
           value={values.name || ''}
           onChange={handleChange}
@@ -40,7 +39,6 @@ function SearchForm({ addMovies, movieFilter, setMovieFilter }) {
         <button
           type='submit'
           className='search__button-form'
-          onClick={handleSubmit}
         ></button>
       </form>
       {isSpan && (
