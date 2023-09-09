@@ -10,11 +10,9 @@ function Profile({
   logout,
   success,
   errorApi,
-  isLoading,
 }) {
-  const { values, valid, handleChange, error, setValues, setValid } = useForm();
+  const { values, handleChange, error, setValues, setValid } = useForm();
   const currentUser = React.useContext(CurrentUserContext);
-  const [errorMessage, setErrorMessage] = React.useState(false);
   const [successMessage, setSuccessMessage] = React.useState(false);
 
   React.useEffect(() => {
@@ -26,7 +24,6 @@ function Profile({
 
   React.useEffect(() => {
     if (success) {
-      setErrorMessage(false);
       setSuccessMessage(true);
     }
   }, [success, errorApi]);
@@ -35,12 +32,7 @@ function Profile({
     e.preventDefault();
     updateUser(values);
   }
-
-  function handleEditButton(e) {
-    e.preventDefault();
-    setErrorMessage(true);
-    setSuccessMessage(false);
-  }
+ 
 
   return (
     <>
@@ -66,7 +58,6 @@ function Profile({
                 placeholder='Денис'
                 onChange={handleChange}
                 value={values.name || ''}
-                disabled={!errorMessage}
               />
             </fieldset>
             <fieldset className='profile__fieldset profile__fieldset_form'>
@@ -84,31 +75,15 @@ function Profile({
                 placeholder='pochta@yandex.ru'
                 onChange={handleChange}
                 value={values.email || ''}
-                disabled={!errorMessage}
               />
             </fieldset>
             {successMessage && (
               <span className='profile__success'>Данные успешно изменены</span>
             )}
-            {errorMessage ? (
-              <button
-                type='submit'
-                className='profile__save-form'
-                disabled={
-                  !valid ||
-                  (values.name === currentUser.name &&
-                    values.email === currentUser.email) ||
-                  isLoading
-                }
-              >
-                Сохранить
-              </button>
-            ) : (
-              <>
+
                 <button
                   className='profile__edit-form'
-                  type='button'
-                  onClick={handleEditButton}
+                  type='submit'
                 >
                   Редактировать
                 </button>
@@ -119,8 +94,6 @@ function Profile({
                 >
                   Выйти из аккаунта
                 </button>
-              </>
-            )}
           </form>
         </section>
       </main>
