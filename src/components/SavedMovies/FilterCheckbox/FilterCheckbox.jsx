@@ -16,6 +16,7 @@ function FilterCheckbox({ movieFilter, setMovieFilter }) {
         id='checkbox'
         onChange={handleButtonClick}
         checked={movieFilter}
+        defaultChecked={false}
       />
       <label className='filter__label' />
     </div>
