@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './MoviesCard.css';
 import { converter } from '../../../utils/helpers';
 
@@ -11,6 +11,10 @@ function MoviesCard({ movie, onCardSave, savedCards, handleDeleteCard }) {
 			return card.nameRU === movie.nameRU;
 		})
 	);
+	
+	useEffect(() => {
+		setIsLiked(savedCards.some((card) => card.nameRU === movie.nameRU));
+	}, [savedCards]);
 
 	function handleSaveClick() {
 		if (isLiked) {
