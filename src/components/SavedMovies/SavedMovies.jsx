@@ -44,7 +44,6 @@ function SavedMovies({
 			const resultMoviesFilter = moviesFilter(query, movieResult);
 			setCardList(resultMoviesFilter);
 			setToLocalStorage('mineMovies', resultMoviesFilter);
-			setToLocalStorage('querySearch', query);
 			setIsCardsLoading(false);
 		});
 	}
