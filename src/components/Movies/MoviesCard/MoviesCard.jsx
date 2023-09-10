@@ -1,11 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './MoviesCard.css';
 import { converter } from '../../../utils/helpers';
 
 function MoviesCard({ movie, onCardSave, savedCards, handleDeleteCard }) {
   
-  const [showSaveButton, setShowSaveButton] = useState(false)
-
 	const [isLiked, setIsLiked] = React.useState(
 		savedCards.some((card) => {
 			if (card.nameRU === movie.nameRU) {
@@ -30,10 +28,7 @@ function MoviesCard({ movie, onCardSave, savedCards, handleDeleteCard }) {
 	}
 
 	return (
-		<div className='card'
-    onMouseEnter={() => setShowSaveButton(true)}
-    onMouseLeave={() => setShowSaveButton(false)}
-    >
+		<div className='card'>
 			<a
 				href={movie.trailerLink}
 				target='_blank'
@@ -51,13 +46,11 @@ function MoviesCard({ movie, onCardSave, savedCards, handleDeleteCard }) {
 					<h2 className='card__title'>{movie.nameRU}</h2>
 					<p className='card__duration'>{converter(movie.duration)}</p>
 				</div>
-				{showSaveButton && (
-					<button
-						type='button'
-						className={`card__like-button ${isLiked ? 'card__like-button_active' : ''}`}
-						onClick={handleSaveClick}
-					>Сохранить</button>
-				)}
+				<button
+					type='button'
+					className={`card__like-button ${isLiked ? 'card__like-button_active' : ''}`}
+					onClick={handleSaveClick}
+				>Сохранить</button>
 			</div>
 		</div>
 	);
