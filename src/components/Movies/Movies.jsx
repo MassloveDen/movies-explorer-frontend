@@ -5,11 +5,12 @@ import SearchForm from './SearchForm/SearchForm';
 import MoviesCardList from './MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import { moviesApi } from '../../utils/MoviesApi';
-import { setToLocalStorage } from '../../utils/helpers';
+import { getFromLocalStorage, setToLocalStorage } from '../../utils/helpers';
 import {
 	MOVIE_ADD_THREE,
 	MOVIE_SCREEN_EIGHT,
 	MOVIE_SCREEN_LARGE,
+	MOVIE_SHORT,
 	MOVIE_SCREEN_MEDIUM,
 	MOVIE_SCREEN_MOBILE,
 	MOVIE_SCREEN_TWELVE,
@@ -21,6 +22,8 @@ function Movies({
 	onCardSave,
 	savedCards,
 	cardList,
+	films,
+	setFilms,
 	setCardList,
 	handleDeleteCard,
 	movieFilter,
@@ -29,48 +32,59 @@ function Movies({
 	setIsCardsLoading,
 }) {
 	const [addMoviesButton, setAddMovieButton] = React.useState(0);
-	const [isActiveButton, setIsActiveButton] = React.useState(
-		cardList.length <= addMoviesButton
-	);
+	const [isActiveButton, setIsActiveButton] = React.useState(false);
+	
 	const [isFind, setIsFind] = React.useState(false);
 	const { width } = useWindowSize();
 
-
 	function qtyOfMoviesCard() {
-		if (width > MOVIE_SCREEN_LARGE) {
-			return setAddMovieButton(MOVIE_SCREEN_TWELVE);
+		if (width >= MOVIE_SCREEN_LARGE) {
+			return setAddMovieButton(12);
 		}
-		if (width > MOVIE_SCREEN_MEDIUM && width < MOVIE_SCREEN_LARGE) {
-			return setAddMovieButton(MOVIE_SCREEN_EIGHT);
+		if (width > 768 && width < MOVIE_SCREEN_LARGE) {
+			return setAddMovieButton(8);
 		}
 		if (width < MOVIE_SCREEN_MOBILE) {
-			return setAddMovieButton(MOVIE_ADD_THREE);
+			return setAddMovieButton(5);
 		}
 	}
 
 	function handleAddButton() {
-		if (width > MOVIE_SCREEN_LARGE) {
+		if (width >= MOVIE_SCREEN_LARGE) {
 			return setAddMovieButton((prev) => prev + 3);
 		} else {
 			return setAddMovieButton((prev) => prev + 2);
 		}
 	}
 
-	React.useEffect(() => {
-		qtyOfMoviesCard();
-	}, [width]);
 
 	function addMovies(query) {
-		setIsCardsLoading(true);
-		moviesApi.getInfo().then((movieResult) => {
-			const resultMoviesFilter = moviesFilter(query, movieResult);
-			setCardList(resultMoviesFilter);
-			setToLocalStorage('mineMovies', resultMoviesFilter);
-			setToLocalStorage('querySearch', query);
-			resultMoviesFilter.length === 0 ? setIsFind(true) : setIsFind(false);
-			setIsActiveButton(resultMoviesFilter.length <= addMoviesButton);
+		if (query === null) {
 			setIsCardsLoading(false);
-		});
+			return;
+		}
+		const getFromLocal = getFromLocalStorage('checkedButton');
+		setIsCardsLoading(true);
+		if (films.length == 0) {
+			moviesApi.getInfo().then((allMovies) => {
+				setFilms(allMovies);
+				setToLocalStorage('films', allMovies);
+				const filteredMovies = moviesFilter(query, allMovies);
+				const shortOrLongMovies = getFromLocal
+					? filteredMovies.filter((film) => film.duration < MOVIE_SHORT)
+					: filteredMovies;
+				setCardList(shortOrLongMovies);
+				setToLocalStorage('mineMovies', shortOrLongMovies);
+			});
+		} else {
+			const filteredMovies = moviesFilter(query, films);
+			const shortOrLongMovies = getFromLocal
+			? filteredMovies.filter((film) => film.duration < MOVIE_SHORT)
+			: filteredMovies;
+			setCardList(shortOrLongMovies);
+			setToLocalStorage('mineMovies', shortOrLongMovies);
+		}
+		setIsCardsLoading(false);
 	}
 
 	function moviesFilter(query, cardList) {
@@ -81,8 +95,18 @@ function Movies({
 		);
 		return filteredList;
 	}
+	React.useEffect(() => {
+		qtyOfMoviesCard()
+	}, [width])
+	React.useEffect(() => {
+		if (addMoviesButton < cardList.length) {
+			setIsActiveButton(true)
+		}
+		if(addMoviesButton >= cardList.length) {
+			setIsActiveButton(false)
+		}
+	}, [cardList, addMoviesButton])
 
-	const isAddMore = !isActiveButton && cardList.length > addMoviesButton && !movieFilter;
 
 	return (
 		<>
@@ -108,7 +132,7 @@ function Movies({
 					qtyOfMoviesCard={qtyOfMoviesCard}
 				/>
 				{isFind && <span className='movies__no-movies'>«Ничего не найдено»</span>}
-				{isAddMore && (
+				{isActiveButton && (
 					<button
 						className='movies__button'
 						onClick={handleAddButton}

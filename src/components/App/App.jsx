@@ -18,22 +18,23 @@ import Footer from '../Footer/Footer';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
-  const [loggedIn, setLoggedIn] = React.useState(
-    false || getFromLocalStorage('jwt')
-  );
+  const [loggedIn, setLoggedIn] = React.useState(false || getFromLocalStorage('jwt'));
   const [savedCards, setSavedCards] = React.useState(
     getFromLocalStorage('savedCards') || []
   );
   const navigate = useNavigate();
 
   const [success, setSuccess] = React.useState(false);
-  const [cardList, setCardList] = React.useState(
-    getFromLocalStorage('mineMovies') || []
-  );
+  const [cardList, setCardList] = React.useState(getFromLocalStorage('mineMovies') || []);
+
+  const [films, setFilms] = React.useState([]);
+  
   const [isCardsLoading, setIsCardsLoading] = React.useState(false);
   const [movieFilter, setMovieFilter] = React.useState(
-    false || getFromLocalStorage('checkedButton')
-  );
+			getFromLocalStorage('checkedButton') === null
+			? false
+			: getFromLocalStorage('checkedButton')
+  )
 
   React.useEffect(() => {
     const jwt = getFromLocalStorage('jwt');
