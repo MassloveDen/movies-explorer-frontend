@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './SearchForm.css';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import useForm from '../../../hooks/useForm';
-import { getFromLocalStorage } from '../../../utils/helpers';
+import { getFromLocalStorage, setToLocalStorage } from '../../../utils/helpers';
 
 function SearchForm({ addMovies, movieFilter, setMovieFilter }) {
   const { values, handleChange, setValues, setValid } = useForm();
@@ -18,6 +18,7 @@ function SearchForm({ addMovies, movieFilter, setMovieFilter }) {
   function handleSubmit(e) {
     e.preventDefault();
     if (values.name) {
+      setToLocalStorage('querySearch', values.name)
       addMovies(values.name);
     } else {
       setIsSpan(true);
@@ -48,6 +49,8 @@ function SearchForm({ addMovies, movieFilter, setMovieFilter }) {
         <FilterCheckbox
           movieFilter={movieFilter}
           setMovieFilter={setMovieFilter}
+          addMovies={addMovies}
+          query={values.name}
         />
         <span className='search__span-checkbox'>Короткометражки</span>
       </div>
