@@ -4,7 +4,6 @@ import Header from '../Header/Header';
 import SearchForm from '../SavedMovies/SearchForm/SearchForm';
 import MoviesCardList from './MoviesCardList/MoviesCardList.jsx';
 import Footer from '../Footer/Footer';
-import { moviesApi } from '../../utils/MoviesApi';
 import SavedDevider from './SavedDevider/SavedDevider';
 import { getFromLocalStorage, setToLocalStorage } from '../../utils/helpers';
 import { mainApi } from '../../utils/MainApi';
@@ -17,7 +16,6 @@ function SavedMovies({
 	movieFilter,
 	setMovieFilter,
 	setIsCardsLoading,
-	setCardList,
 }) {
 	React.useEffect(() => {
 		const jwt = getFromLocalStorage('jwt');
@@ -33,26 +31,15 @@ function SavedMovies({
 	}, []);
 
 	function addMovies(query) {
+		setIsCardsLoading(true);
+
 		setSavedMovies((prev) =>
 			prev.filter((movie) => 
       movie.nameRU.toLowerCase().includes(query.toLowerCase()) ||
       movie.nameEN.toLowerCase().includes(query.toLowerCase()))
       
 		);
-		setIsCardsLoading(true);
-		moviesApi.getInfo().then((movieResult) => {
-			const resultMoviesFilter = moviesFilter(query, movieResult);
-			setCardList(resultMoviesFilter);
-			setToLocalStorage('mineMovies', resultMoviesFilter);
-			setIsCardsLoading(false);
-		});
-	}
-
-	function moviesFilter(query, cardList) {
-		const filteredList = cardList.filter((movie) => {
-			return movie.nameRU.toLowerCase().includes(query.toLowerCase());
-		});
-		return filteredList;
+		setIsCardsLoading(false);
 	}
 
 	return (
