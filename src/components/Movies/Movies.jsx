@@ -7,13 +7,9 @@ import Footer from '../Footer/Footer';
 import { moviesApi } from '../../utils/MoviesApi';
 import { getFromLocalStorage, setToLocalStorage } from '../../utils/helpers';
 import {
-	MOVIE_ADD_THREE,
-	MOVIE_SCREEN_EIGHT,
 	MOVIE_SCREEN_LARGE,
 	MOVIE_SHORT,
-	MOVIE_SCREEN_MEDIUM,
 	MOVIE_SCREEN_MOBILE,
-	MOVIE_SCREEN_TWELVE,
 } from '../../utils/constants';
 import { useWindowSize } from '../../hooks/useWindowSize';
 
@@ -65,7 +61,7 @@ function Movies({
 		}
 		const getFromLocal = getFromLocalStorage('checkedButton');
 		setIsCardsLoading(true);
-		if (films.length == 0) {
+		if (films.length === 0) {
 			moviesApi.getInfo().then((allMovies) => {
 				setFilms(allMovies);
 				setToLocalStorage('films', allMovies);
@@ -75,6 +71,7 @@ function Movies({
 					: filteredMovies;
 				setCardList(shortOrLongMovies);
 				setToLocalStorage('mineMovies', shortOrLongMovies);
+				setToLocalStorage('querySearch', query);
 			});
 		} else {
 			const filteredMovies = moviesFilter(query, films);
@@ -83,6 +80,7 @@ function Movies({
 			: filteredMovies;
 			setCardList(shortOrLongMovies);
 			setToLocalStorage('mineMovies', shortOrLongMovies);
+			setToLocalStorage('querySearch', query);
 		}
 		setIsCardsLoading(false);
 	}

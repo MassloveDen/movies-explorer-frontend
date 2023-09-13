@@ -1,15 +1,7 @@
 import React from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard.jsx';
-import {
-  MOVIE_SCREEN_EIGHT,
-  MOVIE_SCREEN_FIVE,
-  MOVIE_SCREEN_LARGE,
-  MOVIE_SCREEN_MEDIUM,
-  MOVIE_SCREEN_MOBILE,
-  MOVIE_SCREEN_TWELVE,
-  MOVIE_SHORT,
-} from '../../../utils/constants';
+import { MOVIE_SHORT } from '../../../utils/constants';
 
 function MoviesCardList({
   movies,
