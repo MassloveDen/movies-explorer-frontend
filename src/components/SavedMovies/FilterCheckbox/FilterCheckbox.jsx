@@ -1,9 +1,12 @@
 import React from 'react';
 import './FilterCheckbox.css';
 
-function FilterCheckbox({ movieFilter, setMovieFilter }) {
+function FilterCheckbox({ addMovies, movieFilter, setMovieFilter, query }) {
   function handleButtonClick(e) {
     setMovieFilter(e.target.checked);
+    if (addMovies) {
+      addMovies(query ? query: '')
+    }
   }
 
   return (

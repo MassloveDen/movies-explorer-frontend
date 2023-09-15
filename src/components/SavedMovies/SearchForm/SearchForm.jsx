@@ -48,6 +48,8 @@ function SearchForm({ addMovies, movieFilter, setMovieFilter }) {
         <FilterCheckbox
           movieFilter={movieFilter}
           setMovieFilter={setMovieFilter}
+          addMovies={addMovies}
+          query={values.name}
         />
         <span className='search__span-checkbox'>Короткометражки</span>
       </div>
