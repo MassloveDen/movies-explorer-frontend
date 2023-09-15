@@ -12,7 +12,7 @@ function MoviesCardList({
 	isCardsLoading,
 	qtyOfMoviesCard,
 }) {
-  useEffect(() => {
+	useEffect(() => {
     qtyOfMoviesCard()
   }, [movies])
 
