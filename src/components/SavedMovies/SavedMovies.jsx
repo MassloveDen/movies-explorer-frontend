@@ -14,7 +14,7 @@ function SavedMovies({
 	savedMovies,
 	setSavedMovies,
 	movieFilter,
-	setMovieFilter,
+	setSavedMovieFilter,
 	setIsCardsLoading,
 }) {
 	React.useEffect(() => {
@@ -49,7 +49,7 @@ function SavedMovies({
 				<SearchForm
 					addMovies={addMovies}
 					movieFilter={movieFilter}
-					setMovieFilter={setMovieFilter}
+					setSavedMovieFilter={setSavedMovieFilter}
 				/>
 				<MoviesCardList
 					movies={savedMovies}

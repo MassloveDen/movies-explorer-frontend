@@ -3,7 +3,7 @@ import './SearchForm.css';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import useForm from '../../../hooks/useForm';
 
-function SearchForm({ addMovies, movieFilter, setMovieFilter }) {
+function SearchForm({ addMovies, movieFilter, setSavedMovieFilter }) {
   const { values, handleChange, setValid } = useForm();
   const [isSpan, setIsSpan] = React.useState(false);
 
@@ -47,7 +47,7 @@ function SearchForm({ addMovies, movieFilter, setMovieFilter }) {
       <div className='search__checkbox'>
         <FilterCheckbox
           movieFilter={movieFilter}
-          setMovieFilter={setMovieFilter}
+          setSavedMovieFilter={setSavedMovieFilter}
           addMovies={addMovies}
           query={values.name}
         />

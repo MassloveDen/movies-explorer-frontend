@@ -36,6 +36,8 @@ function App() {
 			: getFromLocalStorage('checkedButton')
   )
 
+  const [savedMovieFilter, setSavedMovieFilter] = React.useState(false)
+
   React.useEffect(() => {
     const jwt = getFromLocalStorage('jwt');
     if (jwt) {
@@ -135,7 +137,7 @@ function App() {
         console.log(error);
       });
   };
-
+  
   const handleLogout = () => {
     localStorage.clear();
     navigate('/', { replace: true });
@@ -205,9 +207,9 @@ function App() {
 								savedMovies={savedCards}
 								setSavedMovies={setSavedCards}
 								onCardDelete={handleDeleteCard}
-								movieFilter={movieFilter}
+								movieFilter={savedMovieFilter}
 								setCardList={setCardList}
-								setMovieFilter={setMovieFilter}
+								setSavedMovieFilter={setSavedMovieFilter}
 								isCardsLoading={isCardsLoading}
 								setIsCardsLoading={setIsCardsLoading}
 							></ProtectedRoute>
