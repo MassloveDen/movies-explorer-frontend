@@ -1,20 +1,17 @@
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom'
 import './MoviesCard.css';
 import { converter } from '../../../utils/helpers';
 
 function MoviesCard({ movie, onCardSave, savedCards, handleDeleteCard }) {
-  
-	const [isLiked, setIsLiked] = React.useState(
-		savedCards.some((card) => {
-			if (card.nameRU === movie.nameRU) {
-			}
-			return card.nameRU === movie.nameRU;
-		})
-	);
-	
+	const { pathname } = useLocation()
+	const [isLiked, setIsLiked] = React.useState(false);
+
 	useEffect(() => {
-		setIsLiked(savedCards.some((card) => card.nameRU === movie.nameRU));
-	}, [savedCards]);
+		setIsLiked(savedCards.some((card) => {
+			return card.movieId === movie.id
+		}));
+	}, [savedCards, pathname]);
 
 	function handleSaveClick() {
 		if (isLiked) {
