@@ -28,17 +28,21 @@ function SavedMovies({
 			.catch((error) => {
 				console.log(error);
 			});
+			return() => {
+				setSavedMovies(getFromLocalStorage('mineSavedMovies'));
+			}
 	}, []);
 
 	function addMovies(query) {
 		setIsCardsLoading(true);
+		const jwt = getFromLocalStorage('jwt');
+		mainApi.getSavedCard(jwt)
+		.then((data) => {
+			setSavedMovies(data.filter(movie => 
+				movie.nameRU.toLowerCase().includes(query.toLowerCase()) || 
+				movie.nameEN.toLowerCase().includes(query.toLowerCase())))
+		});
 
-		setSavedMovies((prev) =>
-			prev.filter((movie) => 
-      movie.nameRU.toLowerCase().includes(query.toLowerCase()) ||
-      movie.nameEN.toLowerCase().includes(query.toLowerCase()))
-      
-		);
 		setIsCardsLoading(false);
 	}
 
