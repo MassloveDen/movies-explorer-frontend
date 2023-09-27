@@ -3,10 +3,8 @@ import './Header.css';
 import Navigation from '../Navigation/Navigation';
 import { Link, useNavigate } from 'react-router-dom';
 
-function Header() {
-  const [loggedIn, setLoggedIn] = React.useState(true);
+function Header({ loggedIn }) {
   const navigate = useNavigate();
-  console.log(setLoggedIn);
 
   return (
     <header className='header'>

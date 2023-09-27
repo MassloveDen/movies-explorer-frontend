@@ -106,6 +106,7 @@
 
 .card__item {
   width: 100%;
+  min-height: 203px;
   max-height: 203px;
   object-fit: cover;
   object-position: center;

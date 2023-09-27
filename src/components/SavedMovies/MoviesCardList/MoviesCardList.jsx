@@ -1,9 +1,18 @@
 import React from 'react';
 import './MoviesCardList.css';
-import MoviesCard from '../MoviesCard/MoviesCard';
+import MoviesCard from '../MoviesCard/MoviesCard.jsx';
+import { MOVIE_SHORT } from '../../../utils/constants';
 
-function MoviesCardList({ movies }) {
+function MoviesCardList({
+  movies,
+  onCardDelete,
+  movieFilter,
+}) {
+
+
+
   const [width, setWidth] = React.useState(window.innerWidth);
+
 
   React.useEffect(() => {
     const handleSize = (e) => {
@@ -14,23 +23,32 @@ function MoviesCardList({ movies }) {
       window.removeEventListener('resize', handleSize);
     };
   }, []);
-
+    
   return (
     <section className='cardlist'>
       <ul className='cardlist__list'>
-        {width >= 500
-          ? movies.slice(0, 3).map((movie) => (
-              <li key={movie.movieId} className='cardlist__item-list'>
-                <MoviesCard movie={movie} />
-              </li>
-            ))
-          : width <= 500
-          ? movies.slice(0, 2).map((movie) => (
-              <li key={movie.movieId} className='cardlist__item-list'>
-                <MoviesCard movie={movie} />
-              </li>
-            ))
-          : ''}
+        {movieFilter
+          ? movies
+              .filter((movie) => {
+                return movie.duration < MOVIE_SHORT;
+              })
+              .slice(0, width)
+              .map((movie) => (
+                  <MoviesCard
+                    movie={movie}
+                    movies={movies}
+                    onCardDelete={onCardDelete}
+                    key={movie.id || movie._id}
+                  />
+              ))
+          : movies.slice(0, width).map((movie) => (
+                <MoviesCard
+                  movie={movie}
+                  movies={movies}
+                  onCardDelete={onCardDelete}
+                  key={movie.id || movie._id}
+                />
+            ))}
       </ul>
     </section>
   );

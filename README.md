@@ -30,4 +30,4 @@
 IP 51.250.29.6  
 Frontend https://mass-diplom.nomoreparties.co 
 Backend https://api.mass-diplom.nomoreparties.co 
-Адрес репозитория: https://github.com/MassloveDen/movies-explorer-api
+Адрес репозитория: https://github.com/MassloveDen/movies-explorer-frontend/pull/3

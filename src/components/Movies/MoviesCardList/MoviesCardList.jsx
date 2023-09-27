@@ -1,43 +1,43 @@
-import React from 'react';
-import './MoviesCardList.css';
-import MoviesCard from '../MoviesCard/MoviesCard';
+import React, { useEffect } from "react"
+import "./MoviesCardList.css"
+import MoviesCard from "../MoviesCard/MoviesCard"
+import Preloader from "../../Preloader/Preloader"
 
-function MoviesCardList({ movies }) {
-  const [width, setWidth] = React.useState(window.innerWidth);
+function MoviesCardList({
+	movies,
+	addMoviesButton,
+	onCardSave,
+	savedCards,
+	handleDeleteCard,
+	isCardsLoading,
+	qtyOfMoviesCard,
+}) {
+	useEffect(() => {
+    qtyOfMoviesCard()
+  }, [movies])
 
-  React.useEffect(() => {
-    const handleSize = (e) => {
-      setWidth(e.target.innerWidth);
-    };
-    window.addEventListener('resize', handleSize);
-    return () => {
-      window.removeEventListener('resize', handleSize);
-    };
-  }, []);
-
-  return (
-    <section className='cardlist'>
-      <ul className='cardlist__list'>
-        {width <= 500
-          ? movies.slice(0, 5).map((movie) => (
-              <li key={movie.movieId} className='cardlist__item-list'>
-                <MoviesCard movie={movie} />
-              </li>
-            ))
-          : width <= 950
-          ? movies.slice(0, 8).map((movie) => (
-              <li key={movie.movieId} className='cardlist__item-list'>
-                <MoviesCard movie={movie} />
-              </li>
-            ))
-          : movies.map((movie) => (
-              <li key={movie.movieId} className='cardlist__item-list'>
-                <MoviesCard movie={movie} />
-              </li>
-            ))}
-      </ul>
-    </section>
-  );
+	return (
+		<>
+			{isCardsLoading ? (
+				<Preloader />
+			) : (
+				<section className='cardlist'>
+					<ul className='cardlist__list'>
+						{movies.slice(0, addMoviesButton).map((film) => (
+							<MoviesCard
+								movie={film}
+								movies={movies}
+								onCardSave={onCardSave}
+								savedCards={savedCards}
+								handleDeleteCard={handleDeleteCard}
+								key={film.id}
+							/>
+						))}
+					</ul>
+				</section>
+			)}
+		</>
+	);
 }
 
-export default MoviesCardList;
+export default MoviesCardList
